@@ -218,3 +218,17 @@ function playAudio(url) {
   sound.play();                 // start playing it
 }
 
+// ---------------------------------------------------------------
+// 6. SAFETY HELPER
+// ---------------------------------------------------------------
+
+// Before we put text from the internet into our page as HTML, we replace special
+// characters like < and > so they can't be treated as code.
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
