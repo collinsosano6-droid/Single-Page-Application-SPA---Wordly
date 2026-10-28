@@ -208,3 +208,13 @@ function buildMeaning(meaning) {
 }
 
 
+
+// ---------------------------------------------------------------
+// 5. AUDIO
+// ---------------------------------------------------------------
+
+function playAudio(url) {
+  const sound = new Audio(url); // create an audio player for the file
+  sound.play();                 // start playing it
+}
+
