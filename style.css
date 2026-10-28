@@ -132,6 +132,7 @@ main.container {
   padding-bottom: 3rem;
 }
  
+
 /* ----- Small message panel ("Type a word...", "Looking up...", errors) ----- */
 .message {
   position: relative;                   /* lets us place the round icon inside it */
