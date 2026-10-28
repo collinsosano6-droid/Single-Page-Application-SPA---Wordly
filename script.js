@@ -98,4 +98,113 @@ async function searchWord(typedText) {
 }
 
 
+// 4. SHOWING RESULTS: turn the API data into HTML
+
+// Shows a plain message (used for hints and errors)
+function showMessage(text, isError) {
+  let cssClass = "message";
+  if (isError) {
+    cssClass = "message error";
+  }
+  resultsSection.innerHTML = "<p class=\"" + cssClass + "\">" + escapeHtml(text) + "</p>";
+}
+
+// Builds the card for one word
+function showWord(entry) {
+  // ----- Pronunciation: find the first written pronunciation and the first audio file -----
+  let phoneticText = entry.phonetic || ""; // "||" means "or use this if the left side is empty"
+  let audioUrl = "";
+
+  // A "for" loop visits each item in a list one at a time
+  const phonetics = entry.phonetics || [];
+  for (let i = 0; i < phonetics.length; i++) {
+    if (phoneticText === "" && phonetics[i].text) {
+      phoneticText = phonetics[i].text;
+    }
+    if (audioUrl === "" && phonetics[i].audio) {
+      audioUrl = phonetics[i].audio;
+    }
+  }
+
+  // ----- Start building the HTML for the card -----
+  let html = "<article class=\"card\">";
+  html += "<h2 class=\"word\">" + escapeHtml(entry.word) + "</h2>";
+
+  // Fallback: if there is no pronunciation, say so
+  if (phoneticText !== "") {
+    html += "<span class=\"phonetic\">" + escapeHtml(phoneticText) + "</span>";
+  } else {
+    html += "<span class=\"phonetic\">Pronunciation not available</span>";
+  }
+
+  // Only show the play button if there is an audio file
+  if (audioUrl !== "") {
+    html += "<button id=\"audio-button\" type=\"button\" data-audio=\"" + escapeHtml(audioUrl) + "\">&#9654; Play</button>";
+  } else {
+    html += "<p class=\"note\">No audio available for this word.</p>";
+  }
+
+  // ----- One block for each meaning (noun, verb, adjective...) -----
+  const meanings = entry.meanings || [];
+  for (let i = 0; i < meanings.length; i++) {
+    html += buildMeaning(meanings[i]);
+  }
+
+  html += "</article>";
+
+  // Put the finished HTML on the page
+  resultsSection.innerHTML = html;
+}
+
+// Builds the HTML for one meaning
+function buildMeaning(meaning) {
+  let html = "<section class=\"meaning\">";
+  html += "<h3 class=\"part-of-speech\">" + escapeHtml(meaning.partOfSpeech) + "</h3>";
+
+  // The definitions, as a numbered list
+  html += "<ol>";
+  const definitions = meaning.definitions || [];
+  for (let i = 0; i < definitions.length; i++) {
+    html += "<li>" + escapeHtml(definitions[i].definition);
+
+    // Some definitions have an example sentence, some don't
+    if (definitions[i].example) {
+      html += "<span class=\"example\">\"" + escapeHtml(definitions[i].example) + "\"</span>";
+    }
+    html += "</li>";
+  }
+  html += "</ol>";
+
+  // Synonyms may be listed for the whole meaning or inside each definition,
+  // so we collect them all in one list, skipping duplicates.
+  const synonyms = [];
+  const meaningSynonyms = meaning.synonyms || [];
+  for (let i = 0; i < meaningSynonyms.length; i++) {
+    synonyms.push(meaningSynonyms[i]);
+  }
+  for (let i = 0; i < definitions.length; i++) {
+    const defSynonyms = definitions[i].synonyms || [];
+    for (let j = 0; j < defSynonyms.length; j++) {
+      if (synonyms.includes(defSynonyms[j]) === false) {
+        synonyms.push(defSynonyms[j]);
+      }
+    }
+  }
+
+  // Fallback: show synonym buttons if we have some, otherwise a short note
+  if (synonyms.length > 0) {
+    html += "<div class=\"synonyms\">Synonyms: ";
+    // Show at most 8 so the list doesn't get too long
+    for (let i = 0; i < synonyms.length && i < 8; i++) {
+      html += "<button type=\"button\" class=\"chip\" data-word=\"" + escapeHtml(synonyms[i]) + "\">" + escapeHtml(synonyms[i]) + "</button>";
+    }
+    html += "</div>";
+  } else {
+    html += "<p class=\"note\">No synonyms listed.</p>";
+  }
+
+  html += "</section>";
+  return html;
+}
+
 
