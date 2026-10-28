@@ -44,4 +44,58 @@ resultsSection.addEventListener("click", function (event) {
   }
 });
 
+// 3. SEARCHING: check the input, ask the API, show the answer
+
+async function searchWord(typedText) {
+  // Clean up the input: remove extra spaces and make it lowercase
+  const word = typedText.trim().toLowerCase();
+
+  // Check 1: did the user type anything?
+  if (word === "") {
+    showMessage("Please type a word first.", true);
+    return; // stop here
+  }
+
+  // Check 2: only letters, hyphens, and apostrophes are allowed.
+  // (This pattern is called a "regular expression".)
+  const looksLikeAWord = /^[a-z'-]+$/.test(word);
+  if (looksLikeAWord === false) {
+    showMessage("Please use letters only (no spaces, numbers, or symbols).", true);
+    return;
+  }
+
+  showMessage("Looking up...", false);
+
+  // "try" runs code that might fail; "catch" handles the failure.
+  try {
+    // Build the real address by replacing "<word>" with the typed word.
+    // encodeURIComponent makes sure the word is safe to put in a web address.
+    const url = API_URL.replace("<word>", encodeURIComponent(word));
+    const response = await fetch(url);
+
+    // 404 means "not found"
+    if (response.status === 404) {
+      showMessage("Sorry, no definitions found for \"" + word + "\". Check the spelling or try another word.", true);
+      return;
+    }
+
+    // Any other problem (for example a server error)
+    if (response.ok === false) {
+      showMessage("The dictionary had a problem. Please try again in a moment.", true);
+      return;
+    }
+
+    // Turn the response into a JavaScript array of entries
+    const data = await response.json();
+
+    // A word can have several entries. We show the first one.
+    showWord(data[0]);
+
+  } catch (error) {
+    // We land here if the internet is down
+    showMessage("Could not reach the dictionary. Check your internet connection.", true);
+  }
+}
+
+
 
