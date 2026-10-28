@@ -1,0 +1,337 @@
+
+
+/*   1. COLORS */
+ 
+:root {
+  --navy: #14213d;        /* dark text, footer background */
+  --blue: #2b4bff;        /* main accent color */
+  --blue-dark: #1a35cc;   /* accent when hovering */
+  --blue-light: #e1e6ff;  /* soft accent for buttons and lines */
+  --gray: #566175;        /* secondary text */
+  --page: #f3f6fb;        /* page background */
+  --red: #b3261e;         /* error messages */
+}
+
+
+/*   2. PAGE BASICS */
+
+
+/* Make width/height include padding, so sizes are easier to predict */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;       /* at least as tall as the screen... */
+  display: flex;           /* ...and stack header, main, footer in a column */
+  flex-direction: column;
+  background-color: var(--page);
+  color: var(--navy);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+/* Keeps content in a centered column */
+.container {
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Hides the label visually but keeps it for screen readers */
+.hidden-label {
+  position: absolute;
+  left: -9999px;
+}
+
+
+/*   3. HEADER (the colorful banner)*/
+
+.site-header {
+  padding: 3rem 0 4rem;
+  color: white;
+  text-align: center;
+  /* A gradient fades from one color to another */
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+}
+
+.site-header h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 2.75rem;
+  letter-spacing: 1px;
+}
+
+.tagline {
+  margin: 0.5rem 0 2rem;
+  font-size: 1.1rem;
+  opacity: 0.85;
+}
+
+
+/*   4. SEARCH FORM */
+
+#search-form {
+  display: flex;                        /* box and button side by side */
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);   /* soft shadow under the bar */
+}
+
+#search-input {
+  flex: 1;                              /* the box takes all the leftover width */
+  min-width: 0;
+  padding: 0.8rem 1rem;
+  font-size: 1.1rem;
+  color: var(--navy);
+  background-color: transparent;
+  border: none;
+  border-radius: 10px;
+}
+
+/* No ugly default outline; the whole bar glows instead (see the next rule) */
+#search-input:focus {
+  outline: none;
+}
+
+#search-form:focus-within {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.5), 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+#search-button {
+  padding: 0 1.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: var(--blue);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;   /* smooth changes on hover */
+}
+
+#search-button:hover {
+  background-color: var(--blue-dark);
+  transform: translateY(-2px);                         /* lifts up slightly */
+}
+
+#search-button:active {
+  transform: translateY(0);                            /* presses back down */
+}
+
+
+  /* 5. RESULTS */
+
+main.container {
+  flex: 1;                  /* main grows to fill the space, which pushes the footer down */
+  margin-top: -2rem;        /* pulls the results up so they overlap the banner */
+  padding-bottom: 3rem;
+}
+
+.message {
+  padding: 1rem 1.25rem;
+  color: var(--gray);
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(20, 33, 61, 0.08);
+}
+
+/* Error messages are red */
+.error {
+  color: var(--red);
+  font-weight: bold;
+  border-left: 5px solid var(--red);
+}
+
+/* The white card that holds a word's information */
+.card {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(20, 33, 61, 0.12);
+  animation: slide-up 0.5s;      /* plays the animation below */
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.word {
+  display: inline-block;
+  margin: 0 0.75rem 0 0;
+  font-family: Georgia, serif;
+  font-size: 2.75rem;
+  line-height: 1.2;
+}
+
+.phonetic {
+  color: var(--gray);
+  font-size: 1.15rem;
+}
+
+#audio-button {
+  margin-left: 0.5rem;
+  padding: 0.45rem 1rem;
+  font-size: 1rem;
+  color: var(--blue);
+  background-color: var(--blue-light);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+#audio-button:hover {
+  background-color: var(--blue);
+  color: white;
+  transform: scale(1.08);
+}
+
+/* Each part of speech (noun, verb...) gets its own block */
+.meaning {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--blue-light);
+}
+
+.part-of-speech {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.15rem 0.8rem;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--blue);
+  background-color: var(--blue-light);
+  border-radius: 999px;
+}
+
+ol {
+  padding-left: 1.4rem;
+}
+
+li {
+  margin-bottom: 0.7rem;
+}
+
+.example {
+  display: block;
+  color: var(--gray);
+  font-style: italic;
+}
+
+.synonyms {
+  margin-top: 0.75rem;
+}
+
+/* Clickable synonym "pills" */
+.chip {
+  margin: 0.25rem 0.25rem 0 0;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--navy);
+  background-color: white;
+  border: 2px solid var(--blue-light);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.chip:hover {
+  background-color: var(--blue);
+  border-color: var(--blue);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.note {
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+/* Show a clear outline when someone tabs through the page with the keyboard */
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+
+/*   6. FOOTER  */
+
+.site-footer {
+  padding: 2.5rem 0 1.5rem;
+  color: #c9d2e3;
+  background-color: var(--navy);
+}
+
+/* Brand on the left, links on the right */
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;           /* on narrow screens, the pieces stack */
+}
+
+.footer-brand strong {
+  font-family: Georgia, serif;
+  font-size: 1.3rem;
+  color: white;
+}
+
+.footer-brand p {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.footer-links a {
+  color: #c9d2e3;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  max-width: 44rem;
+  margin: 2rem auto 0;
+  padding: 1.25rem 1.25rem 0;
+  font-size: 0.85rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+
+/* 7. SMALL SCREENS (phones) */
+
+@media (max-width: 30rem) {
+  .site-header h1 {
+    font-size: 2.1rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+
+  .word {
+    font-size: 2.2rem;
+  }
+
+  #search-button {
+    padding: 0 1.1rem;
+  }
+}

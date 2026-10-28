@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Word Lookup</title>
+
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <h1>Word Lookup</h1>
+      <p class="tagline">Find the meaning, pronunciation, and synonyms of any English word.</p>
+
+      <!-- The search form: a text box and a button.
+           Pressing Enter or clicking the button "submits" the form. -->
+      <form id="search-form">
+        <!-- The label describes the box for screen readers (it is hidden on screen) -->
+        <label for="search-input" class="hidden-label">Word to look up</label>
+        <input id="search-input" type="text" placeholder="Type a word, e.g. happy" autocomplete="off">
+        <button id="search-button" type="submit">Search</button>
+      </form>
+    </div>
+  </header>
+
+  <!-- MAIN: the part of the page that changes. JavaScript puts the results
+       (or error messages) inside the results section.
+       aria-live tells screen readers to announce changes. -->
+  <main class="container">
+    <section id="results" aria-live="polite">
+      <p class="message">Type a word above to get started.</p>
+    </section>
+  </main>
+
+  <!-- FOOTER: the dark bar at the bottom of the page -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+
+      <div class="footer-brand">
+        <strong>Word Lookup</strong>
+        <p>A simple dictionary app built with HTML, CSS, and JavaScript.</p>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer">
+        <a href="https://dictionaryapi.dev/" target="_blank" rel="noopener">Free Dictionary API</a>
+      </nav>
+
+    </div>
+    <p class="footer-bottom">&copy; 2026 Word App. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Load our JavaScript (the behavior) from script.js.
+       It goes at the bottom so the page above exists before the code runs. -->
+  <script src="script.js"></script>
+</body>
+</html>
