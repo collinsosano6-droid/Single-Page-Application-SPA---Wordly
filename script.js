@@ -21,7 +21,7 @@ const resultsSection = document.getElementById("results");
 // When the form is submitted (Enter key or button click)...
 searchForm.addEventListener("submit", function (event) {
 
-  event.preventDefault();
+  event.preventDefault(); // prevents default 
 
   searchWord(searchInput.value);
 });
